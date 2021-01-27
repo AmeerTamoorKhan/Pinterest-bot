@@ -1,5 +1,9 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
 from selenium.common.exceptions import StaleElementReferenceException, NoSuchElementException
 import pandas as pd
 import time
@@ -76,14 +80,17 @@ class ImageGrabber:
         enter_login = self.driver.find_element_by_xpath('//*[@id="__PWS_ROOT__"]/div[1]/div/div/div/div[1]/div[2]/div[2]/div/div/div/div/div/div/div/div[4]/form/div[5]/button').click()
 
     def search_bar(self):
-        time.sleep(5)
-        search_bar = self.driver.find_element_by_xpath('//*[@id="searchBoxContainer"]/div/div/div[2]/input').send_keys([self.search, Keys.RETURN])
-        time.sleep(5)
+        #time.sleep(5)
+        search = WebDriverWait(self.driver, 20).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="searchBoxContainer"]/div/div/div[2]/input')))
+        search.send_keys([self.search, Keys.RETURN])
+        #time.sleep(5)
 
     def image_grab(self, progress_bar=None):
         count = 0
         while self.flag:
-            imgs = self.driver.find_elements_by_xpath('//div[@class="Yl- MIw Hb7"]//a')
+            imgs = WebDriverWait(self.driver, 20).until(
+                EC.visibility_of_all_elements_located((By.XPATH, '//div[@class="Yl- MIw Hb7"]//a')))
+            #imgs = self.driver.find_elements_by_xpath('//div[@class="Yl- MIw Hb7"]//a')
             print(len(imgs))
             for i in range(len(imgs)):
                 href = imgs[i].get_attribute('href')
@@ -112,7 +119,7 @@ class ImageGrabber:
 
                 self.driver.close()
                 self.driver.switch_to.window(self.driver.window_handles[0])
-                time.sleep(1)
+                #time.sleep(1)
 
                 if self.count == self.total_images:
                     self.flag = False

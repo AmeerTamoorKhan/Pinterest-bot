@@ -36,6 +36,9 @@ with side_col1:
 with side_col2:
     reset_btn = st.button("Reset")
 
+st.sidebar.markdown('''<h3>Created By: Ameer Tamoor Khan</h3>
+                    <h4>Github : <a href="https://github.com/AmeerTamoorKhan" target="_blank">Click Here </a></h4> 
+                    <h4>Email: drop-in@atkhan.info</h4> ''', unsafe_allow_html=True)
 
 def default():
     st.header('Working Demonstration:')
